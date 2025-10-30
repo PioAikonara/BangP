@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
-use App\Http\Controllers\Admin\PegawaiController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\BarangController as AdminBarangController;
 use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Kasir\DashboardController as KasirDashboard;
@@ -35,8 +35,8 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
     
-    // Pegawai Management
-    Route::resource('pegawai', PegawaiController::class);
+    // User Management
+    Route::resource('user', UserController::class);
     
     // Barang Management
     Route::resource('barang', AdminBarangController::class);
@@ -52,9 +52,12 @@ Route::middleware(['auth', 'role:kasir,admin'])->prefix('kasir')->name('kasir.')
     
     // Transaksi
     Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
+    Route::get('/transaksi/create', [TransaksiController::class, 'create'])->name('transaksi.create');
     Route::post('/transaksi', [TransaksiController::class, 'store'])->name('transaksi.store');
     Route::get('/transaksi/{transaksi}', [TransaksiController::class, 'show'])->name('transaksi.show');
-    Route::get('/transaksi-riwayat', [TransaksiController::class, 'riwayat'])->name('transaksi.riwayat');
+    Route::post('/transaksi/{transaksi}/status', [TransaksiController::class, 'updateStatus'])->name('transaksi.status');
+    Route::get('/transaksi/{transaksi}/print', [TransaksiController::class, 'print'])->name('transaksi.print');
+    Route::get('/laporan', [TransaksiController::class, 'laporan'])->name('laporan.index');
     Route::delete('/barang/expired', [TransaksiController::class, 'hapusExpired'])->name('barang.hapus-expired');
     
     // Member Management

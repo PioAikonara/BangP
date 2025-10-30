@@ -35,21 +35,6 @@ class UserSeeder extends Seeder
             'no_telp' => '081234567890',
         ]);
 
-        // Kasir 2
-        $kasir2 = User::create([
-            'name' => 'Siti Aminah',
-            'email' => 'kasir2@market.com',
-            'password' => Hash::make('password'),
-            'role' => 'kasir',
-        ]);
-
-        Pegawai::create([
-            'user_id' => $kasir2->id,
-            'nama' => 'Siti Aminah',
-            'alamat' => 'Jl. Sudirman No. 45, Jakarta',
-            'no_telp' => '081298765432',
-        ]);
-
         // Pembeli
         $pembeli = User::create([
             'name' => 'Ahmad Rizki',

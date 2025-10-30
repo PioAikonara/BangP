@@ -1,21 +1,21 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Data Pegawai')
-@section('subtitle', 'Kelola data pegawai/kasir')
+@section('title', 'Data User')
+@section('subtitle', 'Kelola data semua pengguna sistem')
 
 @section('content')
 <div class="space-y-6">
     <!-- Header Actions -->
     <div class="flex justify-between items-center">
         <div>
-            <h3 class="text-lg font-semibold text-gray-800">Daftar Pegawai</h3>
-            <p class="text-sm text-gray-600">Total: {{ $pegawai->total() }} pegawai</p>
+            <h3 class="text-lg font-semibold text-gray-800">Daftar User</h3>
+            <p class="text-sm text-gray-600">Total: {{ $users->total() }} pengguna</p>
         </div>
-        <a href="{{ route('admin.pegawai.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 flex items-center">
+        <a href="{{ route('admin.user.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 flex items-center">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
             </svg>
-            Tambah Pegawai
+            Tambah User
         </a>
     </div>
 
@@ -28,45 +28,45 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No. Telepon</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alamat</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($pegawai as $index => $item)
+                    @forelse($users as $index => $user)
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ $pegawai->firstItem() + $index }}
+                            {{ $users->firstItem() + $index }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
                                 <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                                    <span class="text-blue-600 font-semibold">{{ substr($item->nama, 0, 1) }}</span>
+                                    <span class="text-blue-600 font-semibold">{{ substr($user->name, 0, 1) }}</span>
                                 </div>
                                 <div>
-                                    <div class="text-sm font-medium text-gray-900">{{ $item->nama }}</div>
-                                    <div class="text-sm text-gray-500">{{ $item->user->email ?? '-' }}</div>
+                                    <div class="text-sm font-medium text-gray-900">{{ $user->name }}</div>
                                 </div>
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ $item->user->email ?? '-' }}
+                            {{ $user->email }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ $item->no_telp }}
-                        </td>
-                        <td class="px-6 py-4 text-sm text-gray-500">
-                            {{ Str::limit($item->alamat, 50) }}
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                @if($user->role == 'admin') bg-red-100 text-red-800 
+                                @elseif($user->role == 'kasir') bg-green-100 text-green-800 
+                                @else bg-blue-100 text-blue-800 @endif">
+                                {{ ucfirst($user->role) }}
+                            </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                             <div class="flex items-center justify-center space-x-2">
-                                <a href="{{ route('admin.pegawai.edit', $item->id) }}" class="text-blue-600 hover:text-blue-900">
+                                <a href="{{ route('admin.user.edit', $user->id) }}" class="text-blue-600 hover:text-blue-900">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                     </svg>
                                 </a>
-                                <form action="{{ route('admin.pegawai.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pegawai ini?')" class="inline">
+                                <form action="{{ route('admin.user.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus user ini?')" class="inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-600 hover:text-red-900">
@@ -80,12 +80,12 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                        <td colspan="5" class="px-6 py-8 text-center text-gray-500">
                             <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21a6 6 0 00-9-5.197m0 0A5.975 5.975 0 0112 13a5.975 5.975 0 013 5.197M15 21a6 6 0 00-9-5.197M15 21a6 6 0 00-9-5.197"></path>
                             </svg>
-                            <p class="text-lg font-medium">Belum ada data pegawai</p>
-                            <p class="text-sm">Klik tombol "Tambah Pegawai" untuk menambah data</p>
+                            <p class="text-lg font-medium">Belum ada data user</p>
+                            <p class="text-sm">Klik tombol "Tambah User" untuk menambah data</p>
                         </td>
                     </tr>
                     @endforelse
@@ -94,9 +94,9 @@
         </div>
         
         <!-- Pagination -->
-        @if($pegawai->hasPages())
+        @if($users->hasPages())
         <div class="bg-gray-50 px-6 py-4">
-            {{ $pegawai->links() }}
+            {{ $users->links() }}
         </div>
         @endif
     </div>

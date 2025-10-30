@@ -136,17 +136,22 @@ class PesananController extends Controller
         }
     }
     
-    public function riwayat()
+    public function riwayat(Request $request)
     {
         $member = Member::where('user_id', auth()->id())->first();
         
         if (!$member) {
             $pesanan = collect();
         } else {
-            $pesanan = Transaksi::with(['details.barang'])
-                ->where('member_id', $member->id)
-                ->latest()
-                ->paginate(10);
+            $query = Transaksi::with(['details.barang'])
+                ->where('member_id', $member->id);
+            
+            // Filter berdasarkan status jika ada
+            if ($request->has('status') && $request->status != '') {
+                $query->where('status', $request->status);
+            }
+            
+            $pesanan = $query->latest()->paginate(10);
         }
         
         return view('pembeli.pesanan.riwayat', compact('pesanan'));
