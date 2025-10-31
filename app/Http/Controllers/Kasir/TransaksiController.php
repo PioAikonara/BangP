@@ -13,11 +13,21 @@ use Illuminate\Support\Facades\DB;
 
 class TransaksiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $barang = Barang::active()->where('stok', '>', 0)->get();
-        $members = Member::all();
-        return view('kasir.transaksi.index', compact('barang', 'members'));
+        $query = Transaksi::with(['details.barang', 'member.user']);
+        
+        // Filter berdasarkan status jika ada
+        if ($request->has('status') && $request->status != '') {
+            $query->where('status', $request->status);
+        }
+        
+        $transaksi = $query->latest()->paginate(10);
+        
+        // Hitung jumlah transaksi pending untuk notifikasi
+        $pendingCount = Transaksi::where('status', 'pending')->count();
+        
+        return view('kasir.transaksi.index', compact('transaksi', 'pendingCount'));
     }
     
     public function store(Request $request)
@@ -96,6 +106,60 @@ class TransaksiController extends Controller
     {
         $transaksi->load(['details.barang', 'member']);
         return view('kasir.transaksi.show', compact('transaksi'));
+    }
+    
+    public function updateStatus(Request $request, Transaksi $transaksi)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:pending,selesai,dibatalkan',
+        ]);
+        
+        DB::beginTransaction();
+        try {
+            // Update status transaksi
+            $transaksi->update([
+                'status' => $validated['status']
+            ]);
+            
+            // Jika disetujui (selesai), kurangi stok barang
+            if ($validated['status'] === 'selesai') {
+                foreach ($transaksi->details as $detail) {
+                    $barang = $detail->barang;
+                    if ($barang) {
+                        if ($barang->stok < $detail->jumlah) {
+                            throw new \Exception("Stok barang {$barang->nama_barang} tidak mencukupi");
+                        }
+                        $barang->decrement('stok', $detail->jumlah);
+                    }
+                }
+                
+                DB::commit();
+                return redirect()->route('kasir.transaksi.index')
+                    ->with('success', 'Transaksi berhasil disetujui dan diselesaikan');
+            }
+            
+            // Jika dibatalkan
+            if ($validated['status'] === 'dibatalkan') {
+                DB::commit();
+                return redirect()->route('kasir.transaksi.index')
+                    ->with('success', 'Transaksi berhasil dibatalkan');
+            }
+            
+            DB::commit();
+            return back()->with('success', 'Status transaksi berhasil diupdate');
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', $e->getMessage());
+        }
+    }
+    
+    public function print(Transaksi $transaksi)
+    {
+        $transaksi->load(['details.barang', 'member.user', 'kasir']);
+        $setting = Setting::first();
+        
+        return view('kasir.transaksi.print', compact('transaksi', 'setting'));
     }
     
     public function riwayat()

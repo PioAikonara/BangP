@@ -7,22 +7,22 @@
 <div class="space-y-6">
     <!-- Header Welcome -->
     <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-6 rounded-lg shadow-md text-white">
-        <h2 class="text-2xl font-semibold">Selamat Datang di Market!</h2>
-        <p class="mt-2">Dapatkan promo dan penawaran menarik khusus untuk Anda</p>
+        <h1 class="text-2xl font-bold mb-2">🎉 Selamat Datang!</h1>
+        <p class="text-blue-50">Temukan berbagai promo menarik dan produk berkualitas</p>
     </div>
 
     <!-- Promo & Program Section -->
     <div class="bg-white p-6 rounded-lg shadow-md">
-        <div class="flex justify-between items-center mb-6">
-            <h3 class="text-2xl font-bold text-gray-800">Promo & Program</h3>
-            <a href="#" class="text-blue-600 hover:text-blue-800 font-semibold">Lihat Semua</a>
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-gray-800">🎁 Promo & Program</h2>
+            <a href="#" class="text-blue-600 hover:text-blue-700 font-medium text-sm">Lihat Semua →</a>
         </div>
-
+        
         <!-- Promo Cards Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            <!-- Hot Promo Card -->
+            <!-- Gunakan link ImgBB yang BENAR di sini -->
             <div class="rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:scale-105 overflow-hidden">
-                <img src="https://placehold.co/300x200/ff6b35/white?text=HOT+PROMO" alt="Hot Promo" class="w-full h-full object-cover">
+                <img src="
             </div>
 
             <!-- Promo JSM Card -->

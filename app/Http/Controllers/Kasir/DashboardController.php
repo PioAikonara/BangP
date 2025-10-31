@@ -11,22 +11,16 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $kasirId = auth()->id();
+        // Transaksi hari ini (semua kasir untuk kasir bisa lihat semua)
+        $transaksiHariIni = Transaksi::whereDate('created_at', today())->count();
         
-        // Transaksi hari ini oleh kasir ini
-        $transaksiHariIni = Transaksi::where('kasir_id', $kasirId)
-            ->today()
-            ->selesai()
-            ->count();
-        
-        $penjualanHariIni = Transaksi::where('kasir_id', $kasirId)
-            ->today()
-            ->selesai()
+        // Total penjualan hari ini
+        $penjualanHariIni = Transaksi::whereDate('created_at', today())
+            ->where('status', 'selesai')
             ->sum('total_harga');
         
-        // Transaksi terbaru kasir ini
-        $transaksiTerbaru = Transaksi::with(['member', 'details.barang'])
-            ->where('kasir_id', $kasirId)
+        // Transaksi terbaru
+        $transaksiTerbaru = Transaksi::with(['member.user', 'kasir'])
             ->latest()
             ->take(10)
             ->get();
