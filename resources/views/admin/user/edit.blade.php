@@ -1,22 +1,22 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Edit Pegawai')
-@section('subtitle', 'Edit data pegawai')
+@section('title', 'Edit User')
+@section('subtitle', 'Edit data user')
 
 @section('content')
 <div class="max-w-3xl mx-auto">
     <div class="bg-white rounded-lg shadow-md p-6">
-        <form action="{{ route('admin.pegawai.update', $pegawai->id) }}" method="POST">
+        <form action="{{ route('admin.user.update', $user->id) }}" method="POST">
             @csrf
             @method('PUT')
             
             <div class="space-y-4">
                 <!-- Nama -->
                 <div>
-                    <label for="nama" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
-                    <input type="text" name="nama" id="nama" value="{{ old('nama', $pegawai->nama) }}" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('nama') border-red-500 @enderror">
-                    @error('nama')
+                    <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
+                    <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('name') border-red-500 @enderror">
+                    @error('name')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
@@ -24,7 +24,7 @@
                 <!-- Email -->
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email <span class="text-red-500">*</span></label>
-                    <input type="email" name="email" id="email" value="{{ old('email', $pegawai->user->email) }}" required
+                    <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" required
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('email') border-red-500 @enderror">
                     @error('email')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -41,22 +41,24 @@
                     @enderror
                 </div>
 
-                <!-- No. Telepon -->
+                <!-- Konfirmasi Password -->
                 <div>
-                    <label for="no_telp" class="block text-sm font-medium text-gray-700 mb-2">No. Telepon <span class="text-red-500">*</span></label>
-                    <input type="text" name="no_telp" id="no_telp" value="{{ old('no_telp', $pegawai->no_telp) }}" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('no_telp') border-red-500 @enderror">
-                    @error('no_telp')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
+                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">Konfirmasi Password</label>
+                    <input type="password" name="password_confirmation" id="password_confirmation"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </div>
 
-                <!-- Alamat -->
+                <!-- Role -->
                 <div>
-                    <label for="alamat" class="block text-sm font-medium text-gray-700 mb-2">Alamat <span class="text-red-500">*</span></label>
-                    <textarea name="alamat" id="alamat" rows="3" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('alamat') border-red-500 @enderror">{{ old('alamat', $pegawai->alamat) }}</textarea>
-                    @error('alamat')
+                    <label for="role" class="block text-sm font-medium text-gray-700 mb-2">Role <span class="text-red-500">*</span></label>
+                    <select name="role" id="role" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('role') border-red-500 @enderror">
+                        <option value="">Pilih Role</option>
+                        <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
+                        <option value="kasir" {{ old('role', $user->role) == 'kasir' ? 'selected' : '' }}>Kasir</option>
+                        <option value="pembeli" {{ old('role', $user->role) == 'pembeli' ? 'selected' : '' }}>Pembeli</option>
+                    </select>
+                    @error('role')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
@@ -64,7 +66,7 @@
 
             <!-- Buttons -->
             <div class="flex items-center justify-end space-x-3 mt-6 pt-6 border-t border-gray-200">
-                <a href="{{ route('admin.pegawai.index') }}" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-300">
+                <a href="{{ route('admin.user.index') }}" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-300">
                     Batal
                 </a>
                 <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 flex items-center">

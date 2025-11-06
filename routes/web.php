@@ -43,6 +43,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     
     // Laporan
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/print', [LaporanController::class, 'print'])->name('laporan.print');
     Route::get('/laporan/harian', [LaporanController::class, 'harian'])->name('laporan.harian');
 });
 
@@ -74,6 +75,8 @@ Route::middleware(['auth', 'role:pembeli'])->prefix('pembeli')->name('pembeli.')
     Route::post('/keranjang/tambah', [PesananController::class, 'tambahKeranjang'])->name('pesanan.tambah-keranjang');
     Route::delete('/keranjang/{index}', [PesananController::class, 'hapusKeranjang'])->name('pesanan.hapus-keranjang');
     Route::post('/checkout', [PesananController::class, 'checkout'])->name('pesanan.checkout');
+    Route::get('/qris/{transaksi}', [PesananController::class, 'qris'])->name('pesanan.qris');
+    Route::post('/bayar-tunai/{transaksi}', [PesananController::class, 'bayarTunai'])->name('pesanan.bayar-tunai');
     Route::get('/riwayat', [PesananController::class, 'riwayat'])->name('pesanan.riwayat');
 });
 

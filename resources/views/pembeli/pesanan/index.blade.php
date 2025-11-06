@@ -34,17 +34,21 @@
         @foreach($barang as $item)
         <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
             <!-- Product Image -->
-            <div class="aspect-square bg-gray-100 flex items-center justify-center relative">
+            <div class="aspect-square bg-gray-100 flex items-center justify-center relative p-3">
                 @if($item->diskon > 0)
-                <div class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                <div class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded z-10">
                     -{{ $item->diskon }}%
                 </div>
                 @endif
-                <svg class="w-20 h-20 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                </svg>
+                @if($item->gambar)
+                    <img src="{{ Storage::url($item->gambar) }}" alt="{{ $item->nama_barang }}" class="max-w-full max-h-full object-contain">
+                @else
+                    <svg class="w-20 h-20 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                    </svg>
+                @endif
                 @if($item->stok < 10)
-                <div class="absolute bottom-2 left-2 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded">
+                <div class="absolute bottom-2 left-2 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded z-10">
                     Stok Terbatas
                 </div>
                 @endif
@@ -58,11 +62,11 @@
                 <div class="mb-2">
                     @if($item->diskon > 0)
                     <div class="flex items-center gap-2 mb-1">
-                        <span class="text-xs text-gray-500 line-through">Rp {{ number_format($item->harga, 0, ',', '.') }}</span>
+                        <span class="text-xs text-gray-500 line-through">Rp {{ number_format($item->harga_jual, 0, ',', '.') }}</span>
                     </div>
                     <p class="text-blue-600 font-bold text-lg">Rp {{ number_format($item->harga_setelah_diskon, 0, ',', '.') }}</p>
                     @else
-                    <p class="text-blue-600 font-bold text-lg">Rp {{ number_format($item->harga, 0, ',', '.') }}</p>
+                    <p class="text-blue-600 font-bold text-lg">Rp {{ number_format($item->harga_jual, 0, ',', '.') }}</p>
                     @endif
                 </div>
 

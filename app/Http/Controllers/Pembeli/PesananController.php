@@ -80,6 +80,8 @@ class PesananController extends Controller
             return back()->with('error', 'Anda harus menjadi member terlebih dahulu');
         }
         
+        $metodePembayaran = $request->input('metode_pembayaran', 'tunai');
+        
         DB::beginTransaction();
         try {
             $totalHarga = 0;
@@ -98,14 +100,16 @@ class PesananController extends Controller
             }
             
             // Create transaksi
+            $status = ($metodePembayaran == 'qris') ? 'pending' : 'selesai';
+            
             $transaksi = Transaksi::create([
                 'kasir_id' => 1, // Admin default untuk online order
                 'member_id' => $member->id,
                 'total_harga' => $totalHarga,
                 'diskon' => 0,
                 'keuntungan' => 0,
-                'metode_pembayaran' => 'tunai',
-                'status' => 'pending',
+                'metode_pembayaran' => $metodePembayaran,
+                'status' => $status,
             ]);
             
             // Create details
@@ -120,6 +124,11 @@ class PesananController extends Controller
                     'harga_satuan' => $hargaJual,
                     'subtotal' => $hargaJual * $item['jumlah'],
                 ]);
+                
+                // Kurangi stok hanya jika tunai (langsung selesai)
+                if ($metodePembayaran == 'tunai') {
+                    $barang->decrement('stok', $item['jumlah']);
+                }
             }
             
             DB::commit();
@@ -127,12 +136,70 @@ class PesananController extends Controller
             // Kosongkan keranjang
             session()->forget('keranjang');
             
+            // Redirect ke halaman QRIS jika metode QRIS
+            if ($metodePembayaran == 'qris') {
+                return redirect()->route('pembeli.pesanan.qris', $transaksi->id);
+            }
+            
             return redirect()->route('pembeli.pesanan.riwayat')
                 ->with('success', 'Pesanan berhasil dibuat. Silakan ambil di toko.');
                 
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', $e->getMessage());
+        }
+    }
+    
+    public function qris($transaksiId)
+    {
+        $transaksi = Transaksi::with(['details.barang', 'member'])
+            ->where('id', $transaksiId)
+            ->where('member_id', Member::where('user_id', auth()->id())->first()->id)
+            ->firstOrFail();
+        
+        if ($transaksi->status != 'pending') {
+            return redirect()->route('pembeli.pesanan.riwayat')
+                ->with('error', 'Transaksi ini sudah dibayar atau dibatalkan');
+        }
+        
+        return view('pembeli.pesanan.qris', compact('transaksi'));
+    }
+    
+    public function bayarTunai($transaksiId)
+    {
+        $member = Member::where('user_id', auth()->id())->first();
+        
+        $transaksi = Transaksi::with(['details.barang'])
+            ->where('id', $transaksiId)
+            ->where('member_id', $member->id)
+            ->firstOrFail();
+        
+        if ($transaksi->status != 'pending') {
+            return redirect()->route('pembeli.pesanan.riwayat')
+                ->with('error', 'Transaksi ini sudah dibayar atau dibatalkan');
+        }
+        
+        DB::beginTransaction();
+        try {
+            // Update status transaksi
+            $transaksi->update([
+                'status' => 'selesai',
+                'metode_pembayaran' => 'tunai'
+            ]);
+            
+            // Kurangi stok barang
+            foreach ($transaksi->details as $detail) {
+                $detail->barang->decrement('stok', $detail->jumlah);
+            }
+            
+            DB::commit();
+            
+            return redirect()->route('pembeli.pesanan.riwayat')
+                ->with('success', 'Pembayaran berhasil! Silakan ambil pesanan di kasir.');
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
     

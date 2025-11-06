@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('title', 'Dashboard Admin')
-@section('subtitle', 'Ringkasan sistem penjualan Market')
+@section('subtitle', 'Ringkasan sistem penjualan BangP')
 
 @section('content')
 <div class="space-y-6">

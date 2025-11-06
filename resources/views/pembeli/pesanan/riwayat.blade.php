@@ -95,11 +95,36 @@
             </div>
 
             <!-- Order Actions -->
-            <div class="bg-gray-50 px-6 py-4 border-t border-gray-200 flex justify-end gap-2">
-                <a href="#" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 text-sm">Detail</a>
-                @if($item->status === 'selesai')
-                <a href="#" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">Beli Lagi</a>
-                @endif
+            <div class="bg-gray-50 px-6 py-4 border-t border-gray-200 flex flex-wrap justify-between items-center gap-2">
+                <div class="text-sm text-gray-600">
+                    <span class="font-medium">Metode:</span> 
+                    @if($item->metode_pembayaran === 'qris')
+                        <span class="inline-flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+                            </svg>
+                            QRIS
+                        </span>
+                    @else
+                        <span class="inline-flex items-center">
+                            <svg class="w-4 h-4 mr-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                            Tunai
+                        </span>
+                    @endif
+                </div>
+                <div class="flex gap-2">
+                    @if($item->status === 'pending' && $item->metode_pembayaran === 'qris')
+                    <a href="{{ route('pembeli.pesanan.qris', $item->id) }}" 
+                       class="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 text-sm font-semibold">
+                        Lihat QR Code
+                    </a>
+                    @endif
+                    @if($item->status === 'selesai')
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">Beli Lagi</button>
+                    @endif
+                </div>
             </div>
         </div>
         @endforeach

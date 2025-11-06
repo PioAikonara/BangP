@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Market') }} - @yield('title', 'Dashboard')</title>
+    <title>{{ config('app.name', 'BangP') }} - @yield('title', 'Dashboard')</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -27,7 +27,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold text-white">Market</h1>
+                        <h1 class="text-xl font-bold text-white">BangP</h1>
                         <p class="text-xs text-blue-200">
                             @if(auth()->user()->isAdmin())
                                 Admin Panel

@@ -4,8 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Market - Belanja Kebutuhan Sehari-hari Jadi Mudah</title>
-        <meta name="description" content="Market - Toko Serba Ada dengan Harga Terjangkau. Belanja online atau ambil di toko!">
+        <title>BangP - Belanja Kebutuhan Sehari-hari Jadi Mudah</title>
+        <meta name="description" content="BangP - Toko Serba Ada dengan Harga Terjangkau. Belanja online atau ambil di toko!">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -56,7 +56,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                             </svg>
                         </div>
-                        <h1 class="text-2xl font-bold text-gray-800">Market</h1>
+                        <h1 class="text-2xl font-bold text-gray-800">BangP</h1>
                     </div>
                     
                     @if (Route::has('login'))
@@ -136,7 +136,7 @@
         <section id="fitur" class="py-20 bg-white">
             <div class="container mx-auto px-4 lg:px-8">
                 <div class="text-center mb-16">
-                    <h2 class="text-4xl font-bold text-gray-900 mb-4">Kenapa Pilih Market?</h2>
+                    <h2 class="text-4xl font-bold text-gray-900 mb-4">Kenapa Pilih BangP?</h2>
                     <p class="text-xl text-gray-600">Kemudahan dan kenyamanan berbelanja untuk Anda</p>
                 </div>
                 <div class="grid md:grid-cols-3 gap-8">
@@ -218,7 +218,7 @@
             <div class="container mx-auto px-4 lg:px-8 text-center">
                 <h2 class="text-4xl lg:text-5xl font-bold text-white mb-6">Siap Belanja Lebih Mudah?</h2>
                 <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                    Bergabunglah dengan ribuan pelanggan yang sudah merasakan kemudahan berbelanja di Market
+                    Bergabunglah dengan ribuan pelanggan yang sudah merasakan kemudahan berbelanja di BangP
                 </p>
                 @auth
                     <a href="{{ url('/dashboard') }}" class="inline-block px-10 py-4 bg-white text-blue-600 rounded-lg font-bold text-lg hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105">
@@ -243,7 +243,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                                 </svg>
                             </div>
-                            <h3 class="text-2xl font-bold">Market</h3>
+                            <h3 class="text-2xl font-bold">BangP</h3>
                         </div>
                         <p class="text-gray-400">Toko Serba Ada dengan Harga Terjangkau</p>
                     </div>
@@ -258,14 +258,14 @@
                     <div>
                         <h4 class="font-semibold text-lg mb-4">Kontak</h4>
                         <ul class="space-y-2 text-gray-400">
-                            <li>📍 Jl. Contoh No. 123, Jakarta</li>
+                            <li>📍 Jl. Ngawi Selatan. 123, Jakarta</li>
                             <li>📞 (021) 1234-5678</li>
-                            <li>📧 info@market.com</li>
+                            <li>📧 info@BangP.com</li>
                         </ul>
                     </div>
                 </div>
                 <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
-                    <p>&copy; 2024 Market. All rights reserved.</p>
+                    <p>&copy; 2024 BangP. All rights reserved.</p>
                 </div>
             </div>
         </footer>
